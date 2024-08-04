@@ -102,7 +102,6 @@ client.initialize();
 // Rota para pegar o QR Code
 app.get('/api/qrcode', (req, res) => {
     if (qrCodeUrl) {
-        console.log(sentMedia);
         res.send({ url: qrCodeUrl });
         console.log("QrCode Enviado");
     } else {
@@ -138,7 +137,6 @@ app.post('/api/message', (req, res) => {
 });
 
 app.post('/api/media', upload.single('media'), (req, res) => {
-    console.log(req.file);
     sentMedia = MessageMedia.fromFilePath(req.file.path);
     console.log('Media Adicionada');
     res.send("media received successfully");
