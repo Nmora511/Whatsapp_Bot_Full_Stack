@@ -33,10 +33,8 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/');  // Diretório onde os arquivos serão salvos
     },
     filename: function (req, file, cb) {
-        // Obter a extensão do arquivo
-        let fileExtension = path.extname(file.originalname);
         // Cria o nome do arquivo com o identificador único e a extensão original
-        cb(null, file.originalname + fileExtension);
+        cb(null, file.originalname);
     }
 });
 const upload = multer({ storage : storage });
