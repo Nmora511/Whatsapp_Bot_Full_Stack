@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html class="h-full" lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Sender</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-green-400 h-full">
+    <div class="h-fit m-6 flex items-center justify-around">
+        <div class="text-center border-green-950 border-[0.2rem] rounded-md w-[40rem] h-[50rem]">
+            <h1 class="text-6xl font-bold m-6 text-green-950">WhatsApp</h1>
+            <div class="w-full flex justify-center">
+                <div class="h-[0.2rem]  w-[30rem] bg-green-950"></div>
+            </div>
+            <div class="overflow-scroll m-2 h-[83%]"> 
+                <h1 id="wppHistory" class="whitespace-pre-wrap m-2 "></h1>
+             </div>
+            <div id="qrCodeDisplay" class="qr-code absolute top-[15%] left-[9%] flex flex-col justify-center items-center"></div>
+        </div>
+        <div class="text-center border-green-950 border-[0.2rem] rounded-md w-[65rem] h-[50rem] flex flex-col justify-around grow-0">
+            <div class="flex justify-around items-center">
+                <button class="text-5xl h-[6rem] bg-green-950 text-green-50 p-4 rounded-lg hover:bg-green-800" id="generateBtn" >Gerar QrCode</button>
+                <button class="text-5xl h-[6rem] bg-green-800 cursor-default text-green-50 p-4 rounded-lg hover:bg-green-800 absolute left-[58rem] w-[20.2rem] hidden" id="sending" >Enviando</button>
+                
+                <form id="formExcel" class="flex justify-around items-center">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="flex gap-1">
+                            <p id="dataUrl" class="border-green-950 border-[0.2rem] bg-green-800 text-green-50 py-1 px-4 rounded-lg">localização do arquivo...</p>
+                            <button type="submit" id="sendDataBtn" class="text-green-50 border-green-950 border-[0.2rem] hover:bg-green-900 bg-green-800 h-10 w-10 rounded-full">O</button>
+                        </div>
+                        <label for="numbersData" class="bg-green-950 text-green-50 p-4 w-[13rem] h-[3.5rem] rounded-lg hover:bg-green-800 cursor-pointer">Escolher Arquivo Excel</label>
+                        <input name="excel" class="hidden" id="numbersData" type="file">
+                    </div>
+                </form>
+            </div>
+
+            <div class="flex justify-around items-center">
+                <form onsubmit="return false" id="formFile" class="flex justify-around items-center">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="flex gap-1">
+                            <p id="fileUrl" class="border-green-950 border-[0.2rem] bg-green-800 text-green-50 py-1 px-4 rounded-lg">localização do arquivo...</p>
+                            <button type="submit" id="sendFileBtn" class="text-green-50 border-green-950 border-[0.2rem] hover:bg-green-900 bg-green-800 h-10 w-10 rounded-full">O</button>
+                        </div>
+                        <label for="sentFile" class="bg-green-950 text-green-50 p-4 w-[14rem] h-[3.5rem] rounded-lg hover:bg-green-800 cursor-pointer">Escolher Arquivo a Enviar</label>
+                        <input name="media" class="hidden" id="sentFile" type="file">
+                    </div>
+                </form>
+
+                <form id="formText" class="flex justify-around items-center">
+                    <div>
+                        <h1 class="text-green-950 font-bold mb-1">Mensagem a ser enviada:</h1>
+                        <div class="flex items-center gap-2">
+                            <input class="bg-green-950 text-green-50 p-4 w-[14rem] h-[3.5rem] rounded-lg hover:bg-green-800" type="text" id="sentText"></input>
+                            <button type="submit" id="sendTextBtn" class="text-green-50 border-green-950 border-[0.2rem] hover:bg-green-900 bg-green-800 h-10 w-10 rounded-full">O</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <form id="formNumbers" class="flex justify-around">
+                <div>
+                    <h1 class="text-green-950 font-bold mb-1">Número inicial a ser contatado</h1>
+                    <input class="bg-green-950 text-green-50 p-4 w-[14rem] h-[3.5rem] rounded-lg hover:bg-green-800" id="firstNumber" type="number"></input>
+                </div>
+                <div>
+                    <h1 class="text-green-950 font-bold mb-1">Número final a ser contatado</h1>
+                    <input class="bg-green-950 text-green-50 p-4 w-[14rem] h-[3.5rem] rounded-lg hover:bg-green-800" id="lastNumber" type="number"></input>
+                </div>
+                <div class="flex gap-4 justify-center items-center">
+                    <button type="submit" id="sendRangeBtn" class="bg-green-950 text-green-50 p-4 w-[14rem] h-[3.5rem] rounded-lg hover:bg-green-800">Enviar Valores Numéricos</button>
+                    <span id="dataSuccess" class="text-green-50 border-green-950 border-[0.2rem] flex justify-center items-center bg-green-800 h-10 w-10 rounded-full">O</span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="flex justify-center">
+        <div class="text-center border-green-950 border-[0.2rem] flex items-center justify-center rounded-md w-[111rem] h-[6rem]">
+            <progress id="progressBar" value="0" max="100" class=" w-[100rem] h-[2rem] "></progress> 
+            <h1 id="progressNumber" class="m-4 font-bold text-gray-50 border-[0.2rem] border-green-950 bg-green-800 p-2 rounded-lg"></h1>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
